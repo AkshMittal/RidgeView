@@ -32,7 +32,7 @@ It’s built to help understand the shape and difficulty of a trek at a glance.
 
 ---
 
-## **How It Works (Short Version)**
+## **How It Works (A Short Version)**
 
 1. Parse GPX file → extract coordinates + elevation
 2. Draw a polyline on the map
@@ -48,7 +48,7 @@ Straightforward. Nothing overengineered.
 
 * **HTML / CSS / Vanilla JavaScript**
 * **Leaflet.js** for map rendering
-* **Plotly (or your graph library)** for elevation charts
+* **Chart.js** for elevation charts
 * **Modular JS structure** for map logic, UI logic, and data handling
 
 ---
