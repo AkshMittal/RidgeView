@@ -1,0 +1,372 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; 
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+
+}
+ul{
+    margin:0;   
+    padding-inline-start: 0px;
+}
+li{
+    margin:5px 0;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    background-color: #85b9e4;
+}
+
+#headBar {
+    background: #14305F;
+    padding: 16px 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 4px 4px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+#headBar h1 {
+    margin: 0;
+    font-size: 37px;
+    color: #f2efe9;;
+}   
+.headbar-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px; 
+}
+
+.subtitle {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    color: #d5dbe6; 
+    letter-spacing: 0.3px;
+}
+
+#content {
+    flex: 1;
+    display: flex;
+    width: 100%;
+    min-height: 0;
+    overflow: hidden;
+    margin:0;
+    padding-bottom:30px;
+}
+
+#toggle {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    gap:15px;
+    overflow: hidden;
+    margin: 0;
+    padding: 15px;
+    margin-right: -7.5px;
+}
+
+#peakMaster,
+#routeMaster {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    overflow: hidden;
+    max-height: calc(50% - 7.5px);
+    background-color: #f2efe9;
+    cursor: pointer;
+
+}
+
+.scroll-area {
+    max-height: 0;
+    overflow-y: auto;
+    transition: max-height 1s ease;
+    mask-image: linear-gradient(to bottom, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent);
+    cursor:default;
+    border-radius: 0 0 10px 10px;
+    
+}
+
+
+.scroll-area.show {
+  max-height: 400px; 
+  border-top: 1px solid #ddd;
+}
+.scroll-area::-webkit-scrollbar {
+  width: 4px; 
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+  background: #29538f; 
+  border-radius: 5px;
+}
+
+.scroll-area::-webkit-scrollbar-thumb:hover {
+  background: #14305F; 
+}
+
+.master-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;;
+    position: sticky;
+    z-index: 5;
+    padding: 12px 10px;
+    font-weight: bold;
+    margin:0px;
+    background-color: #f2efe9;
+    color:#7ca3d2;
+    user-select: none;
+    border-radius: 10px 10px 0 0;
+}
+
+.item-text,
+.list-header{
+    cursor: pointer;
+}
+
+.master-inner {
+    overflow: hidden;
+    transition: max-height 1s ease-out;
+    margin-right: 5px;
+    color:#56729a;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-left: 40px;
+    list-style: none;
+    
+}
+.master-inner.show {
+    display: block;
+    max-height: 1000px;
+}
+.list-header{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
+    user-select: none;
+}
+
+.inner-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1s ease;
+    margin-left: 5px;
+    border-left: 1px solid #ccc;
+    padding-left:15px;   
+    color: #274d83;   
+    list-style: none;
+}
+.scroll-area > .master-inner {
+    padding-bottom: 5px;
+}
+
+
+.inner-list.show {
+    max-height: 200px;
+}
+
+.inner-arrow,
+.master-arrow{
+    display: inline-block;
+    transition: transform 0.25s ease;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #56729a;   
+}   
+.master-arrow.rotated,
+.inner-arrow.rotated {
+    transform: rotate(180deg);
+}
+.inner-arrow{
+    border-top-color: #274d83;
+}
+
+#data {
+    position: relative;
+    display: flex;
+    flex-grow: 1;
+    min-height: 0;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 15px;
+    padding: 15px;
+
+}
+
+#map {
+    flex: 2 1 0;
+    min-height: 0;
+    height: 100%;
+    position: relative;
+    z-index: 5;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+#elevationChartContainer {
+    flex:0.7 1 0;
+    min-width: 30vw;
+    min-height: 15vh;
+    z-index: 1000;
+    border-radius: 10px ;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+#elevationChart {
+    
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.leaflet-popup{
+    pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+    text-align: center;
+}
+.leaflet-popup-content-wrapper {
+    background: #E7DFD1;
+    border: 1px solid #D7CFC2;
+    color: #1A1A1A;
+}
+.leaflet-popup-tip{
+    background-color:#E7DFD1 ;
+    pointer-events: none;
+}
+.leaflet-popup-close-button {
+    display: none !important;
+}
+.leaflet-popup-content {
+    margin:5px 15px;
+    color: #1A1A1A;
+}   
+
+.app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 13px;
+  color: #777;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 850px) {
+
+    html, body {
+        overflow: auto;
+    }
+
+    #main {
+        height: auto;
+        min-height: 100vh;
+        overflow: visible;
+    }
+
+    #content {
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+        padding-bottom: 0;
+       
+    }
+
+    #toggle {
+        width: 90%;
+        margin: 0;
+        overflow: visible;
+        align-self: center;
+    }
+    
+    #peakMaster,
+    #routeMaster {
+        max-height: none !important;
+        flex: none !important;
+        width: 100%;
+        overflow: visible;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .scroll-area {
+        max-height: 0;
+        overflow-y: hidden;
+        mask-image: none;
+        -webkit-mask-image: none;
+    }
+    .scroll-area.show {
+        max-height: 200px !important;
+        overflow-y: auto;
+    }
+
+    #data {
+        padding: 10px 15px;
+        gap: 10px;
+    }
+
+    #map {
+        height: 45vh;
+        border-radius: 10px;
+        flex: none;
+    }
+
+    #elevationChartContainer {
+        height: 25vh;
+        min-height: 25vh;
+        flex: none;
+        border-radius: 10px;
+    }
+
+    #headBar {
+        padding: 10px 10px;
+    }
+    #headBar h1 {
+        font-size: 26px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+    .app-footer {
+        font-size: 11px;
+        padding: 4px 0;
+        position: static; 
+    }
+    .master-header {
+    border-radius: 10px;
+    }
+
+    .scroll-area {
+        border-radius: 0 0 10px 10px;
+    }
+
+}
