@@ -551,7 +551,7 @@ buildRoutesMaster("routeMaster", "Select Routes", gpx);
 
 function getPeakIcon(height){
     return L.icon({
-        iconUrl: "Icons/mountain-solid-full.svg",
+        iconUrl: "icons/mountain-solid-full.svg",
         iconSize:[32,32],
         iconAnchor:[16,28],
         popupAnchor:[0,-30]
