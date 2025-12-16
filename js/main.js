@@ -1,3 +1,8 @@
+import { worldFly, worldFlyToBounds, isPanning, isMapPanning, setPanning, clearWorldFlyTimeouts, inWorldFly } 
+from "./map-animation.js";
+
+
+
 const map = L.map('map', {
     minZoom: 2.2,
     maxZoom: 18,
@@ -45,8 +50,6 @@ let loadingRouteId = null;
 let currentHitbox = null;
 let lastRouteCenter = null;
 let lastRouteZoom = null;   
-let isPanning = false;
-let worldFlyTimeouts = [];
 
 function collapseAllScrollAreas() {
     const areas = document.querySelectorAll(".scroll-area");
@@ -56,130 +59,6 @@ function collapseAllScrollAreas() {
         a.style.maxHeight = "0px";
     });
     arrows.forEach(a => a.classList.remove("rotated"));
-}
-
-
-
-function worldFly(map, targetLatLng, finalZoom = 10) {
-    map.setMaxBounds(null);
-    map.stop(); 
-    worldFlyTimeouts.forEach(id => clearTimeout(id));
-    worldFlyTimeouts = [];
-
-    const currentZoom = map.getZoom();
-    const currentCenter = map.getCenter();
-    inWorldFly = true;
-
-    if (currentZoom <= 3) {
-        map.flyTo(targetLatLng, 3, {
-            duration: 1.2,
-            animate: true,
-            easeLinearity: 0.25
-        });
-        worldFlyTimeouts.push(
-            setTimeout(() => {
-                map.flyTo(targetLatLng, finalZoom, {
-                    duration: 1.5,
-                    animate: true,
-                    easeLinearity: 0.25
-                });
-            }, 1200)
-        );
-        return;
-    }
-
-    map.flyTo(currentCenter, 3, {
-        duration: 0.8,
-        animate: true,
-        easeLinearity: 0.25
-    });
-
-    worldFlyTimeouts.push(
-        setTimeout(() => {
-            map.flyTo(targetLatLng, 3, {
-                duration: 1.2,
-                animate: true,
-                easeLinearity: 0.25
-            });
-        }, 800)
-    );
-
-    worldFlyTimeouts.push(
-        setTimeout(() => {
-            map.flyTo(targetLatLng, finalZoom, {
-                duration: 1.5,
-                animate: true,
-                easeLinearity: 0.25
-            });
-        }, 2000)
-    );
-    map.once("moveend", () => {
-        map.setMaxBounds(worldBounds);
-        inWorldFly = false;
-        isPanning = false;  
-    });
-}
-
-
-let inWorldFly = false;
-
-function worldFlyToBounds(targetCenter, targetZoom) {
-    isPanning = false;
-    map.setMaxBounds(null);
-    map.stop();
-    worldFlyTimeouts.forEach(id => clearTimeout(id));
-    worldFlyTimeouts = [];
-
-    const currentZoom = map.getZoom();
-    inWorldFly = true;
-
-    if (currentZoom < 3) {
-        map.flyTo(targetCenter, 3, { duration: 1.2 });
-
-        map.once('moveend', () => {
-            if (!inWorldFly) return;
-
-            const zoomInId = setTimeout(() => {
-                map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
-
-                const boundsId = setTimeout(() => {
-                    map.setMaxBounds(worldBounds);
-                }, 1000);
-                worldFlyTimeouts.push(boundsId);
-
-                isPanning = false;
-                inWorldFly = false;
-            }, 0);
-
-            worldFlyTimeouts.push(zoomInId);
-        });
-
-        return;
-    }
-
-    map.flyTo(map.getCenter(), 3, { duration: 0.8 });
-
-    map.once('moveend', () => {
-        if (!inWorldFly) return;
-
-        map.flyTo(targetCenter, 3, { duration: 1.2 });
-
-        map.once('moveend', () => {
-            const zoomInId = setTimeout(() => {
-                map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
-
-                const boundsId = setTimeout(() => {
-                    map.setMaxBounds(worldBounds);
-                }, 500);
-                worldFlyTimeouts.push(boundsId);
-
-                isPanning = false;
-                inWorldFly = false;
-            }, 0);
-
-            worldFlyTimeouts.push(zoomInId);
-        });
-    });
 }
 
 
@@ -361,8 +240,7 @@ function buildPeakItems(ul, peakArray) {
 
             if (currentPeakId === p.name) {
                 map.stop(); 
-                worldFlyTimeouts.forEach(id => clearTimeout(id));
-                worldFlyTimeouts = [];
+                clearWorldFlyTimeouts();
                 map.flyTo(p.coords, 9, {
                     duration: 1,
                     animate: true
@@ -384,7 +262,8 @@ function buildPeakItems(ul, peakArray) {
             activePeakMarker.bindPopup(popupHTML, { autoPan: false }).openPopup();
 
             map.stop();
-            worldFly(map, coords, 9);
+            worldFly(map, worldBounds, coords, 9);
+
             
         });
 
@@ -528,8 +407,7 @@ function buildRouteItems(ul, routeArray) {
             
             if (currentRouteId === clickedPath && lastRouteCenter && lastRouteZoom) {
                 map.stop();
-                worldFlyTimeouts.forEach(id => clearTimeout(id));
-                worldFlyTimeouts = [];
+                clearWorldFlyTimeouts();
                 map.flyTo(lastRouteCenter, lastRouteZoom, { duration: 1 });
                 return;
             }
@@ -574,20 +452,20 @@ const hoverMapMarker = L.circleMarker([0, 0], {
         }).addTo(map);
 hoverMapMarker.setStyle({opacity:0, fillOpacity:0});
 map.on('movestart', (e) => {
-    isPanning = true;
+    setPanning(true);
     hoverMapMarker.setStyle({ opacity: 0, fillOpacity: 0 });
 });
 
 map.on('moveend', () => { 
     if(!inWorldFly){
-        isPanning = false;
+        setPanning(false);
     }
 });
 
 map.on('dblclick', () => { 
-  isPanning = true; 
+  setPanning(true);
   hoverMapMarker.setStyle({ opacity: 0, fillOpacity: 0 });
-  setTimeout(() => { isPanning = false; }, 250);
+  setTimeout(() => { setPanning(false); }, 250);
 });
 
 function loadGPX(gpxPath) { 
@@ -675,7 +553,7 @@ function loadGPX(gpxPath) {
         lastRouteZoom = targetZoom;  
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                worldFlyToBounds(targetCenter, targetZoom);
+                worldFlyToBounds(map, worldBounds, targetCenter, targetZoom);
             });
         });
 
@@ -808,7 +686,7 @@ function loadGPX(gpxPath) {
             }
         }
         function drawElevationChart(distanceData, elevationData) {
-            canvas = document.getElementById('elevationChart');
+            let canvas = document.getElementById('elevationChart');
             canvas.style.backgroundColor = "#f2efe9";
             if (!canvas) {
                 console.error('#elevationChart canvas not found');
