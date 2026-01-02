@@ -1,6 +1,34 @@
-export let isPanning = false;
-export let inWorldFly = false;
+let isPanning = false;
+let inWorldFly = false;
 let worldFlyTimeouts = [];
+
+export function getMap(){
+    return map;
+}
+
+const map = L.map('map', {
+    minZoom: 2.2,
+    maxZoom: 18,
+    worldCopyJump: false,
+}).setView([20, 0], 2.2);
+
+getMap(map);
+
+export const worldBounds = [[-85, -180], [85, 180]];
+map.setMaxBounds(worldBounds);
+
+const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+L.GPX.prototype._fitBounds = function() {};
+
+const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'; 
+
+const tiles = L.tileLayer(tileURL, {
+    attribution,
+    maxZoom: 18,
+    updateWhenIdle: false,
+    updateWhenZooming: true,
+    keepBuffer: 5})
+    .addTo(map); 
 
 export function setPanning(val) {
   isPanning = val;
@@ -23,7 +51,7 @@ export function clearWorldFlyTimeouts() {
   worldFlyTimeouts = [];
 }
 
-export function worldFly(map, worldBounds, targetLatLng, finalZoom = 10) {
+export function worldFly(map, targetLatLng, finalZoom = 10) {
   map.setMaxBounds(null);
   map.stop();
   clearWorldFlyTimeouts();
@@ -63,7 +91,7 @@ export function worldFly(map, worldBounds, targetLatLng, finalZoom = 10) {
   });
 }
 
-export function worldFlyToBounds(map, worldBounds, targetCenter, targetZoom) {
+export function worldFlyToBounds(map, targetCenter, targetZoom) {
   setPanning(false);
   map.setMaxBounds(null);
   map.stop();
@@ -113,3 +141,17 @@ export function worldFlyToBounds(map, worldBounds, targetCenter, targetZoom) {
     });
   });
 }
+map.on('movestart', (e) => {
+    setPanning(true);
+});
+
+map.on('moveend', () => { 
+    if(!inWorldFly){
+        setPanning(false);
+    }
+});
+
+map.on('dblclick', () => { 
+    setPanning(true);
+    setTimeout(() => { setPanning(false); }, 250);
+});
