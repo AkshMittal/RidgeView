@@ -10,7 +10,6 @@ This tool takes a GPX file and turns it into:
 
 * A visual route on the map
 * An elevation graph
-* Key trek metrics
 * Peak and range information (structured in the sidebar)
 * Route paths and markers
 * A clean, functional UI
@@ -23,7 +22,7 @@ It’s built to help understand the shape and difficulty of a trek at a glance.
 
 * **Map Route Rendering** using Leaflet
 * **Custom Markers** for peaks and points of interest
-* **Dynamic Sidebar** for ranges, subgroups, and peaks
+* **Dynamic Sidebar** for ranges, routes and peaks
 * **Elevation Graph** synced with the map
 * **Hover Marker** showing point-specific elevation
 * **Manually Managed Polyline** (for full control over route behavior)
@@ -49,7 +48,7 @@ Straightforward. Nothing overengineered.
 * **HTML / CSS / Vanilla JavaScript**
 * **Leaflet.js** for map rendering
 * **Chart.js** for elevation charts
-* **Modular JS structure** for map logic, UI logic, and data handling
+* **Modularised JS structure** for both independent and dependent logics (future scalability)
 
 ---
 
@@ -65,7 +64,6 @@ Core features work well. UI is stable. Code is being cleaned and modularized. Mo
 * Multiple route layers
 * Trek summary metrics (distance, elevation gain, highest point, etc.)
 * Better markers + custom legend
-* Togglable peaks and routes
 * Cleaner, more polished UI
 * General metrics panel (distance travelled, highest elevation, elevation gain, etc.)      
 
@@ -75,8 +73,8 @@ Core features work well. UI is stable. Code is being cleaned and modularized. Mo
 ## **Why I Built This**
 
 I didn’t build this because I love tech — I actually don’t.
-I built it because I love the mountains.
+I built it because I like mountains.
 
-Everything here exists for that reason. This project helps me make sense of treks, routes, elevation and the details that matter only when you genuinely care about being out there. The code is just the medium; the mountains are the motive.
+This project started making tech more bearable.
 
 ---

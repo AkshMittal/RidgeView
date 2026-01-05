@@ -12,8 +12,6 @@ const map = L.map('map', {
     worldCopyJump: false,
 }).setView([20, 0], 2.2);
 
-getMap(map);
-
 export const worldBounds = [[-85, -180], [85, 180]];
 map.setMaxBounds(worldBounds);
 
@@ -92,54 +90,62 @@ export function worldFly(map, targetLatLng, finalZoom = 10) {
 }
 
 export function worldFlyToBounds(map, targetCenter, targetZoom) {
-  setPanning(false);
-  map.setMaxBounds(null);
-  map.stop();
-  clearWorldFlyTimeouts();
-  setWorldFlying(true);
+    return new Promise(resolve =>{
+        setPanning(false);
+        map.setMaxBounds(null);
+        map.stop();
+        clearWorldFlyTimeouts();
+        setWorldFlying(true);
 
-  const currentZoom = map.getZoom();
+        const currentZoom = map.getZoom();
+        requestAnimationFrame(() => {
+            const finish = () => {
+                map.setMaxBounds(worldBounds);
+                setWorldFlying(false);
+                setPanning(false);
+                resolve(); // ✅ ONLY HERE
+            };
+            
+            if (currentZoom < 3) {
+                map.flyTo(targetCenter, 3, { duration: 1.2 });
 
-  if (currentZoom < 3) {
-    map.flyTo(targetCenter, 3, { duration: 1.2 });
+                map.once("moveend", () => {
+                    if (!isWorldFlying()) return;
 
-    map.once("moveend", () => {
-      if (!isWorldFlying()) return;
+                    worldFlyTimeouts.push(
+                        setTimeout(() => {
+                        map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
+                        worldFlyTimeouts.push(
+                            setTimeout(() => map.setMaxBounds(worldBounds), 500)
+                        );
+                        map.once("moveend", finish);
+                        }, 0)
+                    );
+                });
+                
+            }
 
-      worldFlyTimeouts.push(
-        setTimeout(() => {
-          map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
-          worldFlyTimeouts.push(
-            setTimeout(() => map.setMaxBounds(worldBounds), 500)
-          );
-          setWorldFlying(false);
-          setPanning(false);
-        }, 0)
-      );
+            map.flyTo(map.getCenter(), 3, { duration: 0.8 });
+
+            map.once("moveend", () => {
+                if (!isWorldFlying()) return;
+
+                map.flyTo(targetCenter, 3, { duration: 1.2 });
+
+                map.once("moveend", () => {
+                    worldFlyTimeouts.push(
+                        setTimeout(() => {
+                            map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
+                            worldFlyTimeouts.push(
+                                setTimeout(() => map.setMaxBounds(worldBounds), 500)
+                            );
+                            map.once("moveend", finish);
+                        }, 0)
+                    );
+                });
+            });
+        });      
     });
-    return;
-  }
-
-  map.flyTo(map.getCenter(), 3, { duration: 0.8 });
-
-  map.once("moveend", () => {
-    if (!isWorldFlying()) return;
-
-    map.flyTo(targetCenter, 3, { duration: 1.2 });
-
-    map.once("moveend", () => {
-      worldFlyTimeouts.push(
-        setTimeout(() => {
-          map.flyTo(targetCenter, targetZoom, { duration: 1.5 });
-          worldFlyTimeouts.push(
-            setTimeout(() => map.setMaxBounds(worldBounds), 500)
-          );
-          setWorldFlying(false);
-          setPanning(false);
-        }, 0)
-      );
-    });
-  });
 }
 map.on('movestart', (e) => {
     setPanning(true);

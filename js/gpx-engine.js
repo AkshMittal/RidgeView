@@ -1,3 +1,4 @@
+
 import { isMapPanning } 
 from "./map-module.js"; 
 import {drawElevationChart} 
@@ -175,7 +176,7 @@ export function loadGPX(gpxPath) {
 
     const gpx = new L.GPX(gpxPath, {
         async: true,
-        polyline_options: { color: "#E78A3A", weight: 4, opacity: 0.8 },
+        polyline_options: { color: "#E78A3A", weight: 4, opacity: 0 },
         marker_options: {
             startIcon: startIconLarge,
             endIcon: endIconNormal,
@@ -183,7 +184,7 @@ export function loadGPX(gpxPath) {
         }
 
     })
-    .on('loaded', function (e) {
+    .on('loaded', async function (e) {
         function findPolyline(layer) {
             if (layer instanceof L.Polyline) {
                 return layer;
@@ -227,12 +228,9 @@ export function loadGPX(gpxPath) {
         const targetCenter = bounds.getCenter();
         lastRouteCenter = targetCenter;
         lastRouteZoom = targetZoom;  
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                worldFlyToBounds(map, targetCenter, targetZoom);
-            });
-        });
 
+        await worldFlyToBounds(map, targetCenter, targetZoom);
+        polyline.setStyle({ opacity: 1 , fillOpacity: 1 });
           
 
         const xmlOrString = e.target._gpx;
@@ -288,5 +286,4 @@ export function loadGPX(gpxPath) {
     }).addTo(map);
     routeData = [];
     currentGpxLayer = gpx;
-    
 }

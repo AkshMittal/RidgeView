@@ -5,6 +5,8 @@ from "./gpx-engine.js";
 import {getMap, clearWorldFlyTimeouts, worldFly} 
 from "./map-module.js";
 
+import { showPhase1, showPhase3} 
+from "./user-manuel.js";
 let activePeakMarker = null;  
 let currentPeakId = null;
 let currentRouteId = null;
@@ -308,6 +310,7 @@ function buildRouteRanges(container, routesObj) {
 }
 
 function buildRouteItems(ul, routeArray) {
+    let clickedPath = null;
     routeArray.forEach(route => {
         const li = document.createElement("li");
         li.classList.add("item-row");
@@ -318,12 +321,15 @@ function buildRouteItems(ul, routeArray) {
         textSpan.classList.add("item-text");
         textSpan.textContent = route.name;
         li.appendChild(textSpan);
-
+        
         textSpan.addEventListener("click", () => {
+            if (!clickedPath){
+                showPhase3();
+            }
             if (window.innerWidth <= 850) {
                 collapseAllScrollAreas();
             }
-            const clickedPath = route.path;
+            clickedPath = route.path;
             let lastRouteCenter = getLastRouteCenter();
             let lastRouteZoom = getLastRouteZoom();
             if (currentRouteId === clickedPath && lastRouteCenter && lastRouteZoom) {
@@ -348,7 +354,7 @@ function buildRouteItems(ul, routeArray) {
 buildPeaksMaster("peakMaster", "Select Peaks", peaks);
 buildRoutesMaster("routeMaster", "Select Routes", gpx);
 
-
+showPhase1();
 
 
 

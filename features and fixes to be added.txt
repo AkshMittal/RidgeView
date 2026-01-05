@@ -1,0 +1,36 @@
+features and fixes to be added
+
+- onboarding via use of localStorage, so user-manuel isnt triggered every reload
+- add interaction blockers mid-flight till all modules have the same copy of data to avoid async of chart and map 
+
+
+
+ROUTE COMPARISON ENGINE
+- categorization of routes based on length first so appropriate effort comparisons can be made, mainly if routes are of different categories then it doesn't make sense to compare them on same graph. what we can do is compare sections of longer route to the shorter route like steepest km,steepest continuos incline, max gradient etc etc
+Short (0–12 km) Medium (12–40 km) Long (40–100 km) Expedition (100+ km)
+
+- add an altitude stress profile based on max alt, cumulative elevation, big altitude jumps, steep ascent zones, how many km spent above 4km. category of trek elevation. we are not here to give medical advice on pre- done routes. this is post trek analysis and just giving facts
+
+- add a auto-range identifier to the engine. how it will work - each range has a polygon bounding it with specific coordinates to engulf the whole range. we see the starting point of the route and ending point and accordingly decide which range the route belongs to or if its a range crossing trek, in which case the ending coords of trek becomes crucial 
+
+- climb density metric - like 70%ascent 20%flat 10%descent
+
+- trek type based on elevation pattern of graph. valley trek or peak or pass crossing etc. based on clear cut score increasing metrics, whichever type of trek category gets highest score gets displayed. to be added later. not in v1
+
+- wind exposure potential metric, treeline marked per range. hence if above treeline or on ridge then chances are high but if below treeline all cool
+
+-effort distribution curve
+-reverse profile
+ 
+timestamp metrics
+-ascent rate
+-pace vs gradient curve
+-longest continuous moving section
+-time above certain elevation
+-movement to rest ratio
+
+bonkers feature, calculate avg energy output and fitness level. then estimate the time of completion of a trek based on time, distance and gradiant / effort of previous trek
+
+- range detector, mapping the different ranges into coordinate polygons and seeing which range the parsed coords lie in to make an educated guess. 
+
+- eventually maybe move into proper GIS 

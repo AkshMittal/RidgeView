@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPX Visualizer</title>
+    <title>RidgeView</title>
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
      crossorigin=""/>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    </div>
     <div id="main">
         <div id="headBar">
             <div class="headbar-text">
-                <h1>GPX Visualizer and Metrics</h1>
+                <h1>RidgeView</h1>
                 <p class="subtitle">Simple way to explore trek routes — smooth map, clear elevation, that’s it.</p>
             </div>
         </div>
 
         <div id="content">
+            <div id="overlayDim"></div>
+            <div id="overlayClick">
+                <div id="textContainer">
+                    <div id = "onboardingMessage"></div>
+                    <div id = "continue">(click anywhere to continue)</div>
+                </div>
+            </div>
             <div id="toggle">
                 <ul id="peakMaster">
                 </ul>
@@ -33,7 +41,7 @@
             </div>
         </div>
         <footer class="app-footer">
-            v0.9 • Aksh Mittal
+            v1.0 • Aksh Mittal
         </footer>
 
     </div>
