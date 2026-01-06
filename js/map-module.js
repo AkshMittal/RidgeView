@@ -103,7 +103,7 @@ export function worldFlyToBounds(map, targetCenter, targetZoom) {
                 map.setMaxBounds(worldBounds);
                 setWorldFlying(false);
                 setPanning(false);
-                resolve(); // ✅ ONLY HERE
+                resolve(); 
             };
             
             if (currentZoom < 3) {
@@ -160,4 +160,5 @@ map.on('moveend', () => {
 map.on('dblclick', () => { 
     setPanning(true);
     setTimeout(() => { setPanning(false); }, 250);
+
 });
