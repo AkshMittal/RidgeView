@@ -11,6 +11,7 @@ let activePeakMarker = null;
 let currentPeakId = null;
 let currentRouteId = null;
 let loadingRouteId = null;
+let clickedPath = null;
 let map = getMap();
   
 function collapseAllScrollAreas() {
@@ -310,7 +311,6 @@ function buildRouteRanges(container, routesObj) {
 }
 
 function buildRouteItems(ul, routeArray) {
-    let clickedPath = null;
     routeArray.forEach(route => {
         const li = document.createElement("li");
         li.classList.add("item-row");
