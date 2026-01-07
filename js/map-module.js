@@ -160,4 +160,5 @@ map.on('moveend', () => {
 map.on('dblclick', () => { 
     setPanning(true);
     setTimeout(() => { setPanning(false); }, 250);
+
 });
