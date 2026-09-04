@@ -7,6 +7,9 @@ understand the shape and difficulty of a trek at a glance.
 **Live:** https://akshmittal.github.io/RidgeView
 **Build writeup:** [I didn't build this because I love tech](https://medium.com/@akshmittal/i-didnt-build-this-because-i-love-tech-b68a0c041bb0)
 
+**demo images:** ![peak](images\peak_demo.png) 
+
+![route](images\route_demo.png)
 ---
 
 ## Features
